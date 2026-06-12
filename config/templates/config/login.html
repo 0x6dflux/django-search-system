@@ -1,0 +1,18 @@
+{% extends "config/base.html" %}
+
+{% block title %}Login{% endblock title %}
+
+{% block body %}
+
+<h1>Welcome to Django Search Engine</h1>
+<h3>To use our service please login</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Log In</button>
+</form>
+
+<p>If you don't have any account, please <a href="{% url "signup" %}">Sign Up</a></p>
+
+{% endblock body %}
