@@ -1,0 +1,17 @@
+{% extends "config/base.html" %}
+
+{% block title %}Search{% endblock title %}
+
+{% block body %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <button type="submit">🔎</button>
+</form>
+
+{% for result in results %}
+<p>{{ result }}</p>
+{% endfor %}
+
+{% endblock body %}
