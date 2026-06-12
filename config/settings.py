@@ -100,8 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = "login"
 
-LOGIN_REDIRECT_URL = "search"
+LOGIN_REDIRECT_URL = "search_app:search"
 
 
 # Internationalization

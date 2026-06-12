@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.urls import path
+from django.urls import include, path
 
 from config.views import SignupView
 
 urlpatterns = [
-    path("search/", lambda _: HttpResponse("You are in search"), name="search"),
+    path("search/", include("search_app.urls")),
     path(
         "login/",
         LoginView.as_view(template_name="config/login.html"),
