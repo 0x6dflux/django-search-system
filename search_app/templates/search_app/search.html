@@ -4,26 +4,35 @@
 
 {% block body %}
 
-<form method="POST">
+<form class="mb-5" method="POST">
     {% csrf_token %}
     {{ form.as_table }}
-    <button type="submit">🔎</button>
+    <button class="btn px-5 btn-outline-success border border-success rounded-5" type="submit">🔎</button>
 </form>
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="p-5 bg-light bg-opacity-50 border rounded-5 shadow">
+    <p>{{ message }}</p>
+</div>
 {% endif %}
 
 {% if results %}
-<p>Total number of rows in DB: {{ rows_count }}</p>
-<p>Search time duration: {{ search_time }} [s]</p>
-<p>Total found rows in DB: {{ results_count }}</p>
+<div class="p-5 bg-light bg-opacity-50 border rounded-5 shadow">
+    <p>Total number of rows in DB: {{ rows_count }}</p>
+    <p>Search time duration: {{ search_time }} [s]</p>
+    <p>Total found rows in DB: {{ results_count }}</p>
+</div>
 
 <br>
 
-{% for result in results %}
-<p>{{ result.first_name }} | {{ result.last_name }} | {{ result.city }} | {{ result.phone_number }} | {{ result.national_code }}</p>
-{% endfor %}
+<div class="p-5 bg-light bg-opacity-50 border rounded-5 shadow">
+    {% for result in results %}
+    <p>
+        {{ result.first_name }} | {{ result.last_name }} | {{ result.city }} | {{ result.phone_number }} |
+        {{result.national_code }}
+    </p>
+    {% endfor %}
+</div>
 {% endif %}
 
 {% endblock body %}

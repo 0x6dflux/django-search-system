@@ -4,10 +4,10 @@
 
 {% block body %}
 
-<form method="POST">
+<form class="p-5 bg-light bg-opacity-50 border rounded-5 shadow" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Sign Up</button>
+    <button class="btn px-5 btn-outline-success border border-success rounded-5" type="submit">Sign Up</button>
 </form>
 
 {% endblock body %}
