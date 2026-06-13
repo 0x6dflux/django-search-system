@@ -1,11 +1,15 @@
+from time import time
+from typing import Any
+
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
+
 from search_app.models import FakeModel
-from time import time
 
 
 class SearchForm(forms.Form):
@@ -25,29 +29,58 @@ class SearchView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         start_time = time()
 
-        search_field=request.POST.get('search_field')
-        context = {'rows_count':FakeModel.objects.count()}
+        search_field = request.POST.get("search_field", "")
+        context: dict[str, Any] = {"rows_count": FakeModel.objects.count()}
 
         # guess the search_field type, name, phone, national_code
+        context["message"] = ""
 
-        # do the search
-        results = set()
-        results.update(q1:=FakeModel.objects.filter(first_name__icontains=search_field))
-        results.update(q2:=FakeModel.objects.exclude(last_name=(i for i in q1.all())).filter(last_name__icontains=search_field))
-        results.update(q3:=FakeModel.objects.exclude(city=(j for j in q2.all())).filter(city__icontains=search_field))
-        results.update(q4:=FakeModel.objects.exclude(phone_number=(k for k in q3.all())).filter(phone_number__icontains=search_field))
-        results.update(FakeModel.objects.exclude(national_code=(l for l in q4.all())).filter(national_code__icontains=search_field))
-        
+        results: set[FakeModel] = set()
+
+        search_field.replace("+", "")
+        if search_field.isdigit():
+            if len(search_field) == 12:
+                results.update(
+                    FakeModel.objects.filter(phone_number__iexact=search_field)
+                )
+            elif len(search_field) == 10:
+                results.update(
+                    FakeModel.objects.filter(national_code__iexact=search_field)
+                )
+            else:
+                context["message"] = (
+                    "Please enter a valid phone number or national code !!"
+                )
+        else:
+            results.update(
+                query_set := FakeModel.objects.filter(
+                    Q(first_name__iexact=search_field)
+                    | Q(last_name__iexact=search_field)
+                )
+            )
+            if not query_set:
+                context["message"] = "Please enter a valid first name or last name !!"
         # searching on city will reveal all people living there !!! is it ok ??
-        
-        context["results"]= results
-        context['results_count'] = len(results)
-        context["form"]= SearchForm()
+        # results.update(FakeModel.objects.filter(city__icontains=search_field))
+
+        # overall search
+        # results.update(
+        #     FakeModel.objects.filter(
+        #         Q(first_name__icontains=search_field)
+        #         | Q(last_name__icontains=search_field)
+        #         | Q(phone_number__icontains=search_field)
+        #         | Q(national_code__icontains=search_field)
+        #         | Q(city__icontains=search_field)
+        #     )
+        # )
+
+        context["results"] = results
+        context["results_count"] = len(results)
+        context["form"] = SearchForm()
 
         # request.POST['search_field'] ------ how to delete ??
 
-        
-        context['search_time']= time() - start_time
+        context["search_time"] = time() - start_time
 
         return render(
             request,
