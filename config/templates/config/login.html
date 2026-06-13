@@ -4,15 +4,18 @@
 
 {% block body %}
 
-<h1>Welcome to Django Search Engine</h1>
-<h3>To use our service please login</h3>
+<header class="text-center mt-5">Welcome to Django Search Engine</header>
+<header class="text-center mb-5">To use our service please login</header>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
+<div class="container w-50 text-center">
+    <form class="p-5 bg-light bg-opacity-50 border rounded-5 shadow" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn px-5 btn-outline-success border border-success rounded-5" type="submit">Log
+            In</button>
+    </form>
 
-<p>If you don't have any account, please <a href="{% url "signup" %}">Sign Up</a></p>
+    <footer class="my-5">If you don't have any account, please <a href="{% url 'signup' %}">Sign Up</a></footer>
+</div>
 
 {% endblock body %}
