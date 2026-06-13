@@ -14,7 +14,7 @@ def execute_query(query_string:str)->None:
 
 
 def create_table()->None:
-    query_str = 'CREATE TABLE IF NOT EXISTS Fake ( ' \
+    query_str = 'CREATE TABLE IF NOT EXISTS search_app_fakemodel ( ' \
                     'id INTEGER PRIMARY KEY, ' \
                     'first_name VARCHAR(100) NOT NULL, ' \
                     'last_name VARCHAR(100) NOT NULL, ' \
@@ -26,7 +26,7 @@ def create_table()->None:
 
 
 def insert_into_table(data:str)->None:
-    query_str = 'INSERT INTO Fake ' \
+    query_str = 'INSERT INTO search_app_fakemodel ' \
                     '( first_name, last_name, city, phone_number, national_code ) ' \
                     'VALUES ' + data + ';'
     
