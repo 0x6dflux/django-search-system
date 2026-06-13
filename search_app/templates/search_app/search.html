@@ -10,8 +10,16 @@
     <button type="submit">🔎</button>
 </form>
 
+{% if results %}
+<p>Total number of rows in DB: {{ rows_count }}</p>
+<p>Search time duration: {{ search_time }} [s]</p>
+<p>Total found rows in DB: {{ results_count }}</p>
+
+<br>
+
 {% for result in results %}
-<p>{{ result }}</p>
+<p>{{ result.first_name }} | {{ result.last_name }} | {{ result.city }} | {{ result.phone_number }} | {{ result.national_code }}</p>
 {% endfor %}
+{% endif %}
 
 {% endblock body %}
